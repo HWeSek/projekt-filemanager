@@ -41,6 +41,10 @@ app.post("/", function (req, res) {
     res.redirect('/')
 })
 
+app.get('/filemanager', function (req, res) {
+    res.render('filemanager.hbs');
+})
+
 app.use(express.static('static'));
 app.listen(PORT, function () {
     console.log(`Serwer działa na porcie: ${PORT}`)
