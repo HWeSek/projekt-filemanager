@@ -4,18 +4,18 @@ const PORT = 3000;
 const path = require("path")
 
 const hbs = require('express-handlebars');
-app.set('views', path.join(__dirname, 'views'));         // ustalamy katalog views
+app.set('views', path.join(__dirname, 'views'));
 app.engine('hbs', hbs({
-    extname: '.hbs',
-    partialsDir: "views/partials",
+    extname: 'hbs',
+    defaultLayout: 'main',
+    partialsDir: __dirname + '/views/partials/'
 }));
-app.set('view engine', 'hbs');                           // określenie nazwy silnika szablonów
+app.set('view engine', 'hbs');
 
 const formidable = require('formidable');
 
 const bodyParser = require('body-parser');
 const { isArray } = require('underscore');
-const { log } = require('console');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //////Tablica plików
