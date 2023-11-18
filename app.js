@@ -5,13 +5,17 @@ const path = require("path")
 
 const hbs = require('express-handlebars');
 app.set('views', path.join(__dirname, 'views'));         // ustalamy katalog views
-app.engine('hbs', hbs({ defaultLayout: 'main.hbs' }));
+app.engine('hbs', hbs({
+    extname: '.hbs',
+    partialsDir: "views/partials",
+}));
 app.set('view engine', 'hbs');                           // określenie nazwy silnika szablonów
 
 const formidable = require('formidable');
 
 const bodyParser = require('body-parser');
 const { isArray } = require('underscore');
+const { log } = require('console');
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //////Tablica plików
@@ -29,20 +33,24 @@ app.post("/", function (req, res) {
     form.multiples = true
 
     form.parse(req, function (err, fields, files) {
-        if (!isArray(files)) {
-            files = [files]
+
+        if (isArray(files.upload)) {
+            files.upload.forEach(file => {
+                files_table.push(file);
+            })
         }
-
-        files.forEach(file => {
-            files_table.push(file);
-        });
-
+        if (!isArray(files.upload)) {
+            console.log('plik dodany');
+            files_table.push(files.upload)
+        }
+        console.log(files_table);
     });
     res.redirect('/')
 })
 
 app.get('/filemanager', function (req, res) {
-    res.render('filemanager.hbs');
+    console.log(files_table);
+    res.render('filemanager.hbs', { files_table });
 })
 
 app.use(express.static('static'));
