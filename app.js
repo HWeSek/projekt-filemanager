@@ -53,9 +53,6 @@ app.engine('hbs', hbs({
     defaultLayout: 'main',
     partialsDir: __dirname + '/views/partials/',
     helpers: {
-        idinc: function (id) {
-            return id + 1;
-        },
         fileImg: imghelper
     }
 }));
@@ -70,6 +67,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //////Tablica plików
 let files_table = [];
+let id = 1;
 
 app.get("/", function (req, res) {
     res.render('index.hbs');
@@ -86,22 +84,64 @@ app.post("/", function (req, res) {
 
         if (isArray(files.upload)) {
             files.upload.forEach(file => {
+                file['id'] = id;
+                file['savedate'] = new Date().getTime()
                 files_table.push(file);
+                id++;
             })
         }
         if (!isArray(files.upload)) {
-            console.log('plik dodany');
+            files.upload['id'] = id;
+            files.upload['savedate'] = new Date().getTime()
             files_table.push(files.upload)
+            id++;
         }
-        console.log(files_table);
     });
     res.redirect('/')
 })
 
 app.get('/filemanager', function (req, res) {
-    console.log(files_table);
     res.render('filemanager.hbs', { files_table });
 })
+
+app.get('/show', function (req, res) {
+    files_table.forEach(file => {
+        if (file.id == req.query.id) {
+            res.sendFile(file.path)
+        }
+    })
+})
+
+app.get('/delete', function (req, res) {
+    for (n in files_table) {
+        if (files_table[n].id == req.query.id) {
+            files_table.splice(n, 1)
+            res.redirect('/filemanager')
+        }
+    }
+})
+
+app.get('/download', function (req, res) {
+    files_table.forEach(file => {
+        if (file.id == req.query.id) {
+            res.download(file.path)
+        }
+    })
+})
+
+app.get('/info', function (req, res) {
+    files_table.forEach(file => {
+        if (file.id == req.query.id) {
+            res.render('info.hbs', file)
+        }
+    })
+})
+
+app.get('/reset', function (req, res) {
+    files_table = [];
+    res.redirect('/filemanager')
+})
+
 
 app.use(express.static('static'));
 app.listen(PORT, function () {
