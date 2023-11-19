@@ -1,12 +1,13 @@
 <tr>
-    <td>{{@index}}</td>
-    <td></td>
-    <td>{{name}}</td>
-    <td>{{size}}</td>
+    <td>{{idinc @index}}</td>
+    <td>{{{fileImg type}}}</td>
+    <td style="max-width: 280px; word-wrap:break-word; text-align: start;">{{name}}</td>
+    <td>{{size}}<strong>B</strong></td>
     <td>{{type}}</td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
-    <td></td>
+    <form>
+    <td><button class="btn btn-info">SHOW</button></td>
+    <td><button class="btn btn-dark">INFO</button></td>
+    <td><button class="btn btn-success">DOWNLOAD</button></td>
+    <td><button class="btn btn-danger">DELETE</button></td>
+    </form>
 </tr>

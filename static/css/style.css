@@ -1,3 +1,14 @@
 th, td{
     padding: 10px;
+    text-align: center;
+}
+
+td {
+    border-right: 1px rgb(122, 122, 122) solid;
+    border-bottom: 1px slategray solid;
+}
+
+table {
+    width: 100%;
+    border-bottom: 1px slategray solid;
 }
